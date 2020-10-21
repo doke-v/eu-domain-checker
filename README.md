@@ -1,3 +1,5 @@
+# eu-domain-checker
+
 Tool for checking `.eu` domain status (i.e availability) periodically via `eurid.eu` API.
 
 ## Installation
@@ -5,40 +7,59 @@ Tool for checking `.eu` domain status (i.e availability) periodically via `eurid
 ```
 npm i eu-domain-checker
 ```
-## Sample usage:  
-Check domain availability every midnight until desired status (default: 'AVAILABLE') is met.
+
+## Sample usage:
+
+Check domain every midnight until desired status (default: 'AVAILABLE') is met.
+
 ```js
-const EuDomainChecker = require("eu-domain-checker");
+const EuDomainChecker = require('eu-domain-checker');
 
-const euridChecker = new EuDomainChecker('eurid.eu') //.eu is optional;
+const exampleChecker = new EuDomainChecker('example.eu'); //.eu extension is optional;
 
-euridChecker
-    .check() // using default options
-    .then(console.log)
+exampleChecker
+  .check() // using default options
+  .then(console.log)
+  .catch(console.error);
 ```
-## Methods
-```.check({status, cronExpression})``` -> ```Promise```
- * **status** *optional* `String` - Status to check against (one of: 'AVAILABLE', 'NOT_AVAILABLE', 'NOT_ALLOWED')  
-Default value: ```'AVAILABLE'```
-* **cronExpression** *optional* `String` - Standard cron expression for describing the desired schedule. This might be helpful: [crontab.guru](https://crontab.guru/). You can also check out [cron](https://www.npmjs.com/package/cron) package documentation.  
-Default value: ```'0 0 * * *'```
 
-```.checkOnce()``` -> ```Promise```  
-*A single one time query to get domain status info (no scheduling).*
+## API
+
+`EuDomainChecker(domainName)`
+
+- domainName _required_ `String` - Domain name to check. `.eu` extension is optional.
+
+`.check({status, cronExpression})` -> `Promise`
+
+- **status** _optional_ `String` - Status to check against (one of: 'AVAILABLE', 'NOT_AVAILABLE', 'NOT_ALLOWED')  
+  Default value: `'AVAILABLE'`
+- **cronExpression** _optional_ `String` - Standard cron expression for describing the desired schedule. This might be helpful: [crontab.guru](https://crontab.guru/). You can also check out [cron](https://www.npmjs.com/package/cron) package documentation.  
+  Default value: `'0 0 * * *'` (every midnight)
+
+`.checkOnce()` -> `Promise`  
+_A single one time query to get domain status info (no scheduling)._  
 Example:
+
 ```js
- new EuDomainChecker('eurid.eu').checkOnce().then(console.log); 
+new EuDomainChecker('example.eu')
+  .checkOnce()
+  .then(console.log)
+  .catch(console.error);
 /* {
-  "name": "eurid.eu",
-  "nameAscii": "eurid.eu",
+  "name": "example.eu",
+  "nameAscii": "example.eu",
   "status": "NOT_AVAILABLE",
   "lastModified": null
 } */
 ```
 
-```.isAvailable()``` -> ```Promise```  
-*Same as checkOnce() but returns a boolean if promise resolves.*  
+`.isAvailable()` -> `Promise`  
+_Same as checkOnce() but returns a boolean if promise resolves._  
 Example:
+
 ```js
- new EuDomainChecker('eurid.eu').isAvailable().then(console.log); // false
+new EuDomainChecker('example.eu')
+  .isAvailable()
+  .then(console.log)
+  .catch(console.error); // false
 ```
