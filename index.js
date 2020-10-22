@@ -17,7 +17,10 @@ class EuDomainChecker {
     return axios.get(URL + this.domain).then(({ data }) => data);
   }
 
-  check({ status = DEFAULT_STATUS, cronExpression = DEFAULT_CRON_EXPRESSION }) {
+  check({
+    status = DEFAULT_STATUS,
+    cronExpression = DEFAULT_CRON_EXPRESSION,
+  } = {}) {
     return new Promise(resolve => {
       const job = new CronJob(cronExpression, () => {
         this.fetchDomainData()
